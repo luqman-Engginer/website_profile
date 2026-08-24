@@ -1,129 +1,130 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container py-3">
-    <!-- HEADER DASHBOARD -->
-    <div class="d-flex align-items-center justify-content-between mb-4">
-        <div>
-            <h4 class="fw-bold text-dark mb-1">Dashboard Ringkasan Admin</h4>
-            <p class="text-muted small mb-0">Selamat datang kembali, <strong>{{ auth()->user()->name }}</strong>. Berikut ringkasan sistem hari ini.</p>
-        </div>
-        <div>
-            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill small">
-                <i class="fa-solid fa-circle me-1 fs-6"></i> Sistem Aktif
-            </span>
+<!-- Banner Sapaan Atas -->
+<div class="card-modern bg-gradient-primary p-4 p-md-5 mb-4 text-white position-relative overflow-hidden">
+    <div style="position: relative; z-index: 2;">
+        <span class="badge bg-white bg-opacity-25 px-3 py-1 rounded-pill mb-2 fw-semibold">Sistem PPDB Online</span>
+        <h1 class="fw-bold mb-2">Selamat Datang, Admin! 👋</h1>
+        <p class="mb-0 text-white text-opacity-75" style="max-width: 600px;">
+            Pantau seluruh aktivitas pendaftaran calon siswa, kelola data pengguna, dan verifikasi status kelulusan secara real-time dari panel ini.
+        </p>
+    </div>
+    <div class="position-absolute end-0 bottom-0 opacity-10 pe-4 pb-2" style="font-size: 8rem; line-height: 1;">
+        <i class="fa-solid fa-graduation-cap"></i>
+    </div>
+</div>
+
+<!-- Statistik Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card-modern p-4 d-flex flex-column justify-content-between h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted fw-bold text-uppercase small">Total Pendaftar</span>
+                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                    <i class="fa-solid fa-users fs-5"></i>
+                </div>
+            </div>
+            <h2 class="fw-bold text-dark m-0">{{ $totalPpdb ?? 0 }}</h2>
+            <small class="text-muted mt-2"><i class="fa-solid fa-arrow-trend-up text-success me-1"></i> Data masuk keseluruhan</small>
         </div>
     </div>
 
-    <!-- METRIK STATISTIK (Disesuaikan jadi 3 Kolom) -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4 bg-white p-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-3">
-                        <i class="fa-solid fa-images fs-3"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted small d-block">Total Galeri Foto</span>
-                        <h4 class="fw-bold text-dark mb-0">{{ \App\Models\Gallery::count() ?? 0 }}</h4>
-                    </div>
+    <div class="col-md-3">
+        <div class="card-modern p-4 d-flex flex-column justify-content-between h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-warning fw-bold text-uppercase small">Menunggu Verifikasi</span>
+                <div class="bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                    <i class="fa-solid fa-clock-rotate-left fs-5"></i>
                 </div>
             </div>
+            <h2 class="fw-bold text-warning m-0">{{ $pendingPpdb ?? 0 }}</h2>
+            <small class="text-muted mt-2">Perlu tindakan segera</small>
         </div>
+    </div>
 
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4 bg-white p-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="p-3 bg-success bg-opacity-10 text-success rounded-3">
-                        <i class="fa-solid fa-users fs-3"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted small d-block">Total Pengguna</span>
-                        <h4 class="fw-bold text-dark mb-0">{{ \App\Models\User::count() ?? 1 }}</h4>
-                    </div>
+    <div class="col-md-3">
+        <div class="card-modern p-4 d-flex flex-column justify-content-between h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-success fw-bold text-uppercase small">Diterima</span>
+                <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                    <i class="fa-solid fa-user-check fs-5"></i>
                 </div>
             </div>
+            <h2 class="fw-bold text-success m-0">{{ $acceptedPpdb ?? 0 }}</h2>
+            <small class="text-muted mt-2">Siswa lolos seleksi</small>
         </div>
+    </div>
 
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4 bg-white p-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="p-3 bg-info bg-opacity-10 text-info rounded-3">
-                        <i class="fa-solid fa-gear fs-3"></i>
-                    </div>
-                    <div>
-                        <span class="text-muted small d-block">Status Profil</span>
-                        <h4 class="fw-bold text-dark mb-0" style="font-size: 1.1rem;">
-                            {{ $globalSetting->school_name ? 'Tersetting' : 'Belum Set' }}
-                        </h4>
-                    </div>
+    <div class="col-md-3">
+        <div class="card-modern p-4 d-flex flex-column justify-content-between h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-danger fw-bold text-uppercase small">Ditolak</span>
+                <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                    <i class="fa-solid fa-user-xmark fs-5"></i>
+                </div>
+            </div>
+            <h2 class="fw-bold text-danger m-0">{{ $rejectedPpdb ?? 0 }}</h2>
+            <small class="text-muted mt-2">Tidak memenuhi syarat</small>
+        </div>
+    </div>
+</div>
+
+<!-- Informasi Tambahan / Quick Action -->
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card-modern p-4 h-100">
+            <h5 class="fw-bold text-dark mb-3">Aktivitas Sistem & Pintasan Cepat</h5>
+            <p class="text-muted small mb-4">Gunakan pintasan di bawah untuk mengelola data operasional portal dengan cepat.</p>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <a href="{{ route('admin.ppdb.index') }}" class="p-3 border rounded-3 d-flex align-items-center gap-3 text-decoration-none bg-light text-dark h-100">
+                        <div class="bg-primary text-white rounded-3 p-3">
+                            <i class="fa-solid fa-id-card fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Verifikasi PPDB</h6>
+                            <small class="text-muted">Periksa formulir pendaftaran siswa baru.</small>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a href="{{ route('admin.users.index') }}" class="p-3 border rounded-3 d-flex align-items-center gap-3 text-decoration-none bg-light text-dark h-100">
+                        <div class="bg-success text-white rounded-3 p-3">
+                            <i class="fa-solid fa-users-gear fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Kelola Pengguna</h6>
+                            <small class="text-muted">Atur hak akses admin dan siswa.</small>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row g-4">
-        <!-- AKSI CEPAT ADMIN -->
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
-                <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-bolt text-warning me-2"></i>Aksi Cepat Admin</h5>
-                <div class="row g-3">
-
-                    <!-- TOMBOL 1: TAMBAH GALERI (BIRU) -->
-                    <div class="col-md-6">
-                        <a href="{{ route('admin.galleries.create') }}"
-                           class="w-100 p-3 rounded-3 text-start d-flex align-items-center justify-content-between text-decoration-none"
-                           style="background-color: #eff6ff; border: 1.5px solid #bfdbfe;">
-                            <div>
-                                <strong class="d-block fw-bold" style="color: #1d4ed8;">Tambah Galeri Baru</strong>
-                                <span class="small" style="color: #64748b;">Upload dokumentasi kegiatan sekolah</span>
-                            </div>
-                            <i class="fa-solid fa-plus fs-4" style="color: #1d4ed8;"></i>
-                        </a>
-                    </div>
-
-                    <!-- TOMBOL 2: EDIT PROFIL -->
-                    <div class="col-md-6">
-                        <a href="{{ route('admin.settings.index') }}"
-                           class="w-100 p-3 rounded-3 text-start d-flex align-items-center justify-content-between text-decoration-none"
-                           style="background-color: #f0fdf4; border: 1.5px solid #bbf7d0;">
-                            <div>
-                                <strong class="d-block fw-bold" style="color: #15803d;">Edit Profil Sekolah</strong>
-                                <span class="small" style="color: #64748b;">Ubah nama, kontak, & lokasi</span>
-                            </div>
-                            <i class="fa-solid fa-pen-to-square fs-4" style="color: #15803d;"></i>
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- SIDEBAR INFORMASI ADMINISTRATOR -->
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm rounded-4 bg-white p-4 mb-4">
-                <h6 class="fw-bold text-dark mb-3">Informasi Administrator</h6>
-                <div class="d-flex align-items-center gap-3 mb-3">
-                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold fs-4" style="width: 50px; height: 50px;">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                    </div>
-                    <div>
-                        <strong class="d-block text-dark">{{ auth()->user()->name }}</strong>
-                        <span class="text-muted small">{{ auth()->user()->email }}</span>
-                    </div>
-                </div>
-                <hr class="my-3 opacity-25">
-                <div class="small">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Hak Akses:</span>
-                        <span class="badge bg-primary">Administrator</span>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <span class="text-muted">Versi App:</span>
-                        <span class="fw-bold text-dark">v1.0.0 (Laravel)</span>
-                    </div>
-                </div>
-            </div>
+    <div class="col-lg-4">
+        <div class="card-modern p-4 h-100">
+            <h5 class="fw-bold text-dark mb-3">Status Sistem</h5>
+            <ul class="list-unstyled mb-0">
+                <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span class="text-muted small">Versi Laravel</span>
+                    <span class="fw-bold text-dark">13.24.0</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span class="text-muted small">Versi PHP</span>
+                    <span class="fw-bold text-dark">8.5.8</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span class="text-muted small">Database Status</span>
+                    <span class="badge bg-success bg-opacity-10 text-success px-2 py-1 rounded-pill">Connected</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center py-2">
+                    <span class="text-muted small">Server Waktu</span>
+                    <span class="fw-bold text-dark">{{ date('H:i') }} WIB</span>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

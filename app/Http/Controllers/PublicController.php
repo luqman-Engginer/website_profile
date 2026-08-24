@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Gallery;
 use Illuminate\Http\Request;
+use App\Models\Gallery;
+use App\Models\Setting;
 
 class PublicController extends Controller
 {
     public function home()
     {
-        $galleries = Gallery::latest()->take(6)->get();
-        return view('public.home', compact('galleries'));
+        return view('public.home');
     }
 
     public function about()
@@ -20,12 +20,24 @@ class PublicController extends Controller
 
     public function gallery()
     {
-        $galleries = Gallery::latest()->paginate(12);
+        $galleries = Gallery::latest()->get();
         return view('public.gallery', compact('galleries'));
     }
 
     public function contact()
     {
-        return view('public.contact');
+        $setting = Setting::first();
+        return view('public.contact', compact('setting'));
+    }
+
+    public function storeContact(Request $request)
+    {
+        $request->validate([
+            'name'    => 'required|string|max:255',
+            'email'   => 'required|email|max:255',
+            'message' => 'required|string',
+        ]);
+
+        return redirect()->back()->with('success', 'Pesan Anda berhasil terkirim!');
     }
 }

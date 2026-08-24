@@ -3,157 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $globalSetting->school_name ?? 'Portal Sekolah' }}</title>
+    <title>PPDB Online - School Portal</title>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap & FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc;
-            color: #334155;
-        }
-
-        .nav-link-public {
-            color: #475569 !important;
-            font-weight: 500;
-            font-size: 0.95rem;
-            padding: 0.5rem 1rem !important;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease-in-out;
-        }
-
-        .nav-link-public:hover {
-            color: #2563eb !important;
-            background-color: #eff6ff;
-        }
-
-        .nav-link-public.active {
-            color: #2563eb !important;
-            font-weight: 700;
-            background-color: #eff6ff;
-        }
-
-        .footer-dark {
-            background: linear-gradient(180deg, #0f172a 0%, #0b1329 100%);
-        }
-
-        /* Menghilangkan garis border-top pada layar desktop */
-        @media (min-width: 992px) {
-            .border-lg-none {
-                border-top: none !important;
-                padding-top: 0 !important;
-            }
-        }
+        body { font-family: 'Poppins', sans-serif; background-color: #f4f7fa; color: #2b3445; }
+        .navbar-modern { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        .bg-gradient-primary { background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); color: white; }
+        .card-modern { border: none; border-radius: 20px; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: all 0.3s ease; }
+        .card-modern:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.07); }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- NAVBAR PUBLIC -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm py-3 sticky-top">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg sticky-top navbar-modern py-3">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-primary" href="{{ url('/') }}">
-                <div class="bg-primary bg-opacity-10 text-primary rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                    <i class="fa-solid fa-graduation-cap fs-5"></i>
+            <a class="navbar-brand fw-bold text-dark d-flex align-items-center gap-2" href="{{ route('home') }}">
+                <div class="bg-gradient-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="fa-solid fa-graduation-cap fs-6"></i>
                 </div>
-                <span class="fs-5 text-dark fw-bold tracking-tight">{{ $globalSetting->school_name ?? 'Portal Sekolah' }}</span>
+                <span>SMK Imaginatic</span>
             </a>
-
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#publicNavbar">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-            <div class="collapse navbar-collapse" id="publicNavbar">
-                <ul class="navbar-nav mx-auto gap-1 my-3 my-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-public {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">Beranda</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-public {{ request()->is('about') ? 'active' : '' }}" href="{{ url('/about') }}">Tentang</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-public {{ request()->is('gallery') ? 'active' : '' }}" href="{{ url('/gallery') }}">Galeri</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-public {{ request()->is('contact') ? 'active' : '' }}" href="{{ url('/contact') }}">Kontak</a>
-                    </li>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-2">
+                    <li class="nav-item"><a class="nav-link fw-semibold {{ request()->routeIs('home') ? 'text-primary' : '' }}" href="{{ route('home') }}">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold {{ request()->routeIs('about') ? 'text-primary' : '' }}" href="{{ route('about') }}">Tentang Kami</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold {{ request()->routeIs('gallery') ? 'text-primary' : '' }}" href="{{ route('gallery') }}">Galeri</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold {{ request()->routeIs('contact') ? 'text-primary' : '' }}" href="{{ route('contact') }}">Kontak</a></li>
                 </ul>
-
-                @auth
-                    <!-- STATE: JIKA SUDAH LOGIN -->
-                    <div class="d-flex align-items-center gap-2 border-lg-none">
-                        <a href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard') }}" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm">
+                <div class="d-flex gap-2 ms-lg-3 mt-3 mt-lg-0">
+                    @auth
+                        <a href="{{ auth()->user()->role == 'admin' ? route('admin.dashboard') : route('user.dashboard') }}" class="btn btn-primary bg-gradient-primary border-0 rounded-pill px-4 fw-semibold shadow-sm">
                             <i class="fa-solid fa-gauge me-1"></i> Dashboard
                         </a>
-
-                        <form action="{{ route('logout') }}" method="POST" class="d-inline m-0">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-danger rounded-pill px-3 fw-semibold d-flex align-items-center gap-1.5">
-                                <i class="fa-solid fa-right-from-bracket"></i>
-                                <span>Logout</span>
-                            </button>
-                        </form>
-                    </div>
-                @else
-                    <!-- STATE: JIKA BELUM LOGIN -->
-                    <div class="d-flex align-items-center gap-2 border-lg-none">
-                        <a href="{{ route('login') }}" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm">
-                            <i class="fa-solid fa-right-to-bracket me-1"></i> Masuk
-                        </a>
-                    </div>
-                @endauth
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-light text-primary rounded-pill px-4 fw-semibold">Masuk</a>
+                        <a href="{{ route('register') }}" class="btn btn-primary bg-gradient-primary border-0 rounded-pill px-4 fw-semibold shadow-sm">Daftar</a>
+                    @endauth
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- KONTEN UTAMA -->
+    <!-- CONTENT -->
     <main class="flex-grow-1">
         @yield('content')
     </main>
 
     <!-- FOOTER -->
-    <footer class="text-white footer-dark py-5 mt-auto border-top border-secondary border-opacity-10">
-        <div class="container">
-            <div class="row gy-4 justify-content-between">
-                <div class="col-lg-5">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <div class="bg-primary text-white rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                        </div>
-                        <h5 class="fw-bold text-white mb-0">{{ $globalSetting->school_name ?? 'SMK 73' }}</h5>
-                    </div>
-                    <p class="text-white-50 small mb-3" style="line-height: 1.6;">
-                        Portal resmi sistem informasi & dokumentasi kegiatan sekolah. Menyediakan akses data terintegrasi dan transparan.
-                    </p>
-                    <p class="text-white-50 small mb-0 d-inline-flex align-items-center gap-2">
-                        <i class="fa-solid fa-location-dot text-primary"></i>
-                        <span>{{ $globalSetting->location ?? 'Jl. Kalimusada, Bekasi' }}</span>
-                    </p>
-                </div>
-
-                <div class="col-lg-4 text-lg-end">
-                    <h6 class="fw-bold text-white mb-3">Hubungi Layanan</h6>
-                    <p class="text-white-50 small mb-2 d-inline-flex align-items-center gap-2">
-                        <i class="fa-brands fa-whatsapp text-success fs-5"></i>
-                        <span class="fs-6 fw-semibold text-white">{{ $globalSetting->contact_number ?? '081234567890' }}</span>
-                    </p>
-                    <div class="text-white-50 small">Hari Kerja: Senin - Jumat (07:00 - 15:30 WIB)</div>
-                </div>
-            </div>
-
-            <hr class="border-secondary my-4 opacity-20">
-
-            <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 text-white-50 small">
-                <div>&copy; {{ date('Y') }} {{ $globalSetting->school_name ?? 'Portal Sekolah' }}. Hak Cipta Dilindungi.</div>
-                <div>Dikembangkan dengan Laravel & Bootstrap 5</div>
-            </div>
+    <footer class="bg-white border-top py-4 mt-5">
+        <div class="container text-center text-muted small">
+            <p class="m-0">&copy; 2026 SMK Imaginatic. All rights reserved.</p>
         </div>
     </footer>
 

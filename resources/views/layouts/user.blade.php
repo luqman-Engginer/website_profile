@@ -3,131 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Portal - Sekolah</title>
+    <title>Portal Siswa - Modern Portal</title>
 
-    <!-- Bootstrap 5 CSS & FontAwesome -->
+    <!-- Bootstrap 5 & Google Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8fafc;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7fa;
+            color: #2b3445;
         }
-        .wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
+        /* Sidebar User */
         .sidebar {
-            width: 260px;
-            background-color: #ffffff;
-            border-right: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 100;
+            background: #ffffff;
+            border-right: none !important;
+            box-shadow: 4px 0 24px rgba(0,0,0,0.04);
+            transition: all 0.3s ease;
         }
-        .main-content {
-            margin-left: 260px;
-            flex-grow: 1;
-            padding: 2rem;
-            width: calc(100% - 260px);
-        }
-        .sidebar-brand {
-            padding: 1.5rem 1.25rem;
-            font-weight: 700;
-            font-size: 1.15rem;
-            color: #1e293b;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .sidebar-menu {
-            padding: 1rem 0.75rem;
-            list-style: none;
-            margin: 0;
-            flex-grow: 1;
-        }
-        .nav-link-custom {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 0.75rem 1rem;
-            color: #64748b;
-            text-decoration: none;
-            border-radius: 10px;
+        .nav-link {
+            border-radius: 12px;
+            margin-bottom: 8px;
+            color: #7d879c !important;
             font-weight: 500;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
-        .nav-link-custom:hover {
-            background-color: #f1f5f9;
-            color: #2563eb;
+        .nav-link:hover {
+            background-color: #f3f5f9;
+            color: #4f46e5 !important;
+            transform: translateX(5px);
         }
-        .nav-link-custom.active {
-            background-color: #eff6ff;
-            color: #2563eb;
-            font-weight: 600;
+        .nav-link.active {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
         }
-        .sidebar-footer {
-            padding: 1rem 0.75rem;
-            border-top: 1px solid #f1f5f9;
-        }
-        .w-20px {
-            width: 20px;
+        .nav-link i {
+            width: 24px;
             text-align: center;
         }
+        /* Modern Cards */
+        .card-modern {
+            border: none;
+            border-radius: 20px;
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            transition: all 0.3s ease;
+        }
+        .card-modern:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.07);
+        }
+        /* Gradient Accent */
+        .bg-gradient-primary { background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); color: white; }
     </style>
 </head>
 <body>
 
-    <div class="wrapper">
+    <div class="d-flex">
         <!-- SIDEBAR USER -->
-        <aside class="sidebar">
-            <div class="sidebar-brand d-flex align-items-center gap-2">
-                <i class="fa-solid fa-graduation-cap text-primary fs-4"></i>
-                <span>Portal Siswa</span>
+        <aside class="sidebar vh-100 position-fixed" style="width: 270px; z-index: 1000;">
+            <div class="d-flex align-items-center justify-content-center p-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-gradient-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <span class="fw-bold text-dark fs-5">Student Portal</span>
+                </div>
             </div>
 
-            <ul class="sidebar-menu d-flex flex-column gap-1">
-                <li>
-                    <a href="{{ route('user.dashboard') }}" class="nav-link-custom {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
-                        <i class="fa-solid fa-house w-20px"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('user.ppdb') }}" class="nav-link-custom {{ request()->routeIs('user.ppdb*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-file-pen w-20px"></i>
-                        <span>Pendaftaran PPDB</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('user.profile') }}" class="nav-link-custom {{ request()->routeIs('user.profile') ? 'active' : '' }}">
-                        <i class="fa-solid fa-user w-20px"></i>
-                        <span>Profil Saya</span>
-                    </a>
-                </li>
-            </ul>
+            <div class="p-3">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('user.dashboard') ? 'active' : '' }} px-3 py-2" href="{{ route('user.dashboard') }}">
+                            <i class="fa-solid fa-house me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('user.ppdb') ? 'active' : '' }} px-3 py-2" href="{{ route('user.ppdb') }}">
+                            <i class="fa-solid fa-file-pen me-2"></i> Form PPDB
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('user.profile') ? 'active' : '' }} px-3 py-2" href="{{ route('user.profile') }}">
+                            <i class="fa-solid fa-user me-2"></i> Profil Saya
+                        </a>
+                    </li>
+                </ul>
 
-            <div class="sidebar-footer">
+                <hr class="my-4 opacity-10">
+
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="nav-link-custom text-danger w-100 border-0 bg-transparent text-start">
-                        <i class="fa-solid fa-right-from-bracket w-20px"></i>
-                        <span>Keluar</span>
+                    <button type="submit" class="btn btn-light text-danger w-100 d-flex align-items-center justify-content-center gap-2 rounded-4 py-2" style="background: #fee2e2; border: none; font-weight: 600;">
+                        <i class="fa-solid fa-power-off"></i> Keluar
                     </button>
                 </form>
             </div>
         </aside>
 
-        <!-- KONTEN UTAMA USER -->
-        <main class="main-content">
-            @yield('content')
+        <!-- MAIN CONTENT -->
+        <main class="w-100" style="margin-left: 270px; min-height: 100vh;">
+            <header class="d-flex justify-content-between align-items-center p-4 bg-white sticky-top" style="box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
+                <h5 class="m-0 fw-bold" style="color: #2b3445;">Portal Siswa</h5>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="text-end d-none d-md-block">
+                        <p class="m-0 fw-semibold fs-6">{{ auth()->user()->name ?? 'Siswa' }}</p>
+                        <small class="text-muted">Calon Siswa</small>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Siswa') }}&background=6366f1&color=fff&bold=true" class="rounded-circle" width="45" height="45">
+                </div>
+            </header>
+
+            <div class="p-4 p-md-5">
+                @yield('content')
+            </div>
         </main>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -9,11 +9,9 @@ class Ppdb extends Model
 {
     use HasFactory;
 
-    protected $table = 'ppdbs';
-
     protected $fillable = [
         'user_id',
-        'tahun_ajaran',
+        'tahun_ajaran',    // <--- WAJIB ADA INI
         'nama_siswa',
         'nisn',
         'jurusan',
@@ -23,9 +21,6 @@ class Ppdb extends Model
         'status',
     ];
 
-    /**
-     * Relasi balik ke User
-     */
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -11,14 +11,10 @@ return new class extends Migration
         Schema::create('ppdbs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('tahun_ajaran');
-            $table->string('nama_siswa');
-            $table->string('nisn');
             $table->string('jurusan');
-            $table->string('asal_sekolah');
-            $table->string('nama_orang_tua');
             $table->string('no_whatsapp');
-            $table->string('status')->default('Menunggu Verifikasi');
+            $table->text('alamat');
+            $table->string('status')->default('Menunggu'); // Menunggu, Diterima, Ditolak
             $table->timestamps();
         });
     }

@@ -8,25 +8,18 @@ use Illuminate\Http\Request;
 
 class PpdbController extends Controller
 {
-    /**
-     * Menampilkan Form Pendaftaran PPDB
-     */
     public function index()
     {
-        $user = auth()->user();
+        $ppdb = Ppdb::where('user_id', auth()->id())->first();
 
-        return view('user.ppdb', compact('user'));
+        return view('user.ppdb.index', compact('ppdb'));
     }
 
-    /**
-     * Memproses dan Menyimpan Data Pendaftaran PPDB
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'tahun_ajaran'   => 'required|string',
             'nama_siswa'     => 'required|string|max:255',
-            'nisn'           => 'required|numeric|digits:10',
+            'nisn'           => 'required|numeric',
             'jurusan'        => 'required|string',
             'asal_sekolah'   => 'required|string|max:255',
             'nama_orang_tua' => 'required|string|max:255',
@@ -35,16 +28,16 @@ class PpdbController extends Controller
 
         Ppdb::create([
             'user_id'        => auth()->id(),
-            'tahun_ajaran'   => $validated['tahun_ajaran'],
+            'tahun_ajaran'   => '2026/2027',
             'nama_siswa'     => $validated['nama_siswa'],
             'nisn'           => $validated['nisn'],
             'jurusan'        => $validated['jurusan'],
             'asal_sekolah'   => $validated['asal_sekolah'],
             'nama_orang_tua' => $validated['nama_orang_tua'],
             'no_whatsapp'    => $validated['no_whatsapp'],
-            'status'         => 'Menunggu Verifikasi',
+            'status'         => 'Menunggu',
         ]);
 
-        return back()->with('success', 'Formulir PPDB berhasil dikirim. Tim panitia akan segera menghubungi Anda.');
+        return redirect()->route('user.ppdb')->with('success', 'Formulir pendaftaran berhasil dikirim!');
     }
 }

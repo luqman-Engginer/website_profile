@@ -3,96 +3,102 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 
 class AuthController extends Controller
 {
     /**
-     * Menampilkan form login
+     * Menampilkan form login.
      */
-    public function showLogin(): View
+    public function showLogin()
     {
         return view('auth.login');
     }
 
     /**
-     * Proses autentikasi login
+     * Memproses otentikasi login pengguna.
      */
-    public function login(Request $request): RedirectResponse
+    public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required'],
+            'email'    => 'required|email',
+            'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials, $request->remember)) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            $user = Auth::user();
-
-            // Redirect langsung ke route tanpa menggunakan intended()
-            if ($user->role === 'admin') {
-                return redirect()->route('admin.dashboard');
+            // Direct dashboard berdasarkan role pengguna
+            if (Auth::user()->role === 'admin') {
+                return redirect()->intended(route('admin.dashboard'));
             }
 
-            return redirect()->route('user.dashboard');
+            return redirect()->intended(route('user.dashboard'));
         }
 
-        return back()->withErrors([
-            'email' => 'Email atau password yang Anda masukkan salah.',
-        ])->onlyInput('email');
+        return back()->with('error', 'Email atau password yang Anda masukkan salah.')->withInput();
     }
 
     /**
-     * Menampilkan form registrasi
+     * Menampilkan form registrasi.
      */
-    public function showRegister(): View
+    public function showRegister()
     {
         return view('auth.register');
     }
 
     /**
-     * Proses registrasi pengguna baru
+     * Memproses pendaftaran akun baru.
      */
-    public function register(Request $request): RedirectResponse
+    public function register(Request $request)
     {
+        // 1. Validasi dasar (Aturan 'confirmed' dilepas agar fleksibel)
         $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role'     => ['required', 'in:user,admin'],
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
+            'role'     => 'nullable|in:user,admin',
         ]);
 
+        // 2. Cek manual nilai password vs konfirmasi password (kebal dari beda penamaan field Blade)
+        $confirmPassword = $request->input('password_confirmation') ?? $request->input('confirm_password');
+
+        if ($request->password !== $confirmPassword) {
+            return back()->withErrors([
+                'password' => 'Konfirmasi password tidak cocok!'
+            ])->withInput();
+        }
+
+        // 3. Buat akun baru ke database dengan assign role
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role'     => $request->role,
+            'role'     => $request->role ?? 'user',
         ]);
 
+        // Otomatis login setelah berhasil mendaftar
         Auth::login($user);
 
+        // Redirect sesuai role yang baru terdaftar
         if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard')->with('success', 'Registrasi akun Admin berhasil!');
         }
 
-        return redirect()->route('user.dashboard');
+        return redirect()->route('user.dashboard')->with('success', 'Registrasi berhasil! Selamat datang di Portal PPDB.');
     }
 
     /**
-     * Proses logout pengguna
+     * Memproses logout pengguna.
      */
-    public function logout(Request $request): RedirectResponse
+    public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('status', 'Anda telah berhasil logout.');
+        return redirect()->route('login');
     }
 }
