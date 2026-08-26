@@ -10,13 +10,19 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::table('settings', function (Blueprint $table) {
-        $table->string('email')->nullable();
-        $table->string('phone')->nullable();
-        $table->text('address')->nullable();
-    });
-}
+    {
+        Schema::table('settings', function (Blueprint $table) {
+            if (!Schema::hasColumn('settings', 'email')) {
+                $table->string('email')->nullable();
+            }
+            if (!Schema::hasColumn('settings', 'phone')) {
+                $table->string('phone')->nullable();
+            }
+            if (!Schema::hasColumn('settings', 'address')) {
+                $table->text('address')->nullable();
+            }
+        });
+    }
 
     /**
      * Reverse the migrations.
@@ -24,7 +30,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('settings', function (Blueprint $table) {
-            //
+            $table->dropColumn(['email', 'phone', 'address']);
         });
     }
 };
