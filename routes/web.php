@@ -38,12 +38,10 @@ Route::middleware('auth')->group(function () {
     // AREA KHUSUS USER (TERPISAH DARI PUBLIC & ADMIN)
     // ==========================================
     Route::prefix('user')->name('user.')->group(function () {
-        // Dashboard Siswa & Profil User
         Route::get('/dashboard', [UserDashboard::class, 'index'])->name('dashboard');
         Route::get('/profile', [UserDashboard::class, 'profile'])->name('profile');
         Route::put('/profile', [UserDashboard::class, 'updateProfile'])->name('profile.update');
 
-        // Pendaftaran PPDB User
         Route::get('/ppdb', [PpdbController::class, 'index'])->name('ppdb');
         Route::post('/ppdb', [PpdbController::class, 'store'])->name('ppdb.store');
     });
@@ -60,9 +58,14 @@ Route::middleware('auth')->group(function () {
 
         // Management PPDB Admin
         Route::get('/ppdb', [AdminPpdbController::class, 'index'])->name('ppdb.index');
+
+        // Rute Ekspor PPDB (Excel & PDF) - Ditaruh SEBELUM route parameter {id} agar tidak bentrok
+        Route::get('/ppdb/export/excel', [AdminPpdbController::class, 'exportExcel'])->name('ppdb.export.excel');
+        Route::get('/ppdb/export/pdf', [AdminPpdbController::class, 'exportPdf'])->name('ppdb.export.pdf');
+
         Route::get('/ppdb/{id}', [AdminPpdbController::class, 'show'])->name('ppdb.show');
 
-        // Rute untuk Update Status (Mendukung nama 'admin.ppdb.update' dan 'admin.ppdb.update-status')
+        // Rute untuk Update Status
         Route::put('/ppdb/{id}', [AdminPpdbController::class, 'update'])->name('ppdb.update');
         Route::patch('/ppdb/{id}/status', [AdminPpdbController::class, 'updateStatus'])->name('ppdb.update-status');
 
@@ -71,6 +74,9 @@ Route::middleware('auth')->group(function () {
         // Settings Profil Sekolah
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
+
+        // Rute Cetak PDF Per Siswa (Individual)
+        Route::get('/ppdb/{id}/export-pdf', [AdminPpdbController::class, 'exportSinglePdf'])->name('ppdb.export-single-pdf');
     });
 
 });

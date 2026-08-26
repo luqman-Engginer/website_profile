@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
 {
-    Schema::create('settings', function (Blueprint $table) {
-        $table->id();
-        $table->string('school_name')->default('SMK Negeri 1');
+    Schema::table('settings', function (Blueprint $table) {
         $table->string('email')->nullable();
         $table->string('phone')->nullable();
         $table->text('address')->nullable();
-        $table->timestamps();
     });
 }
 
@@ -26,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('settings');
+        Schema::table('settings', function (Blueprint $table) {
+            //
+        });
     }
 };

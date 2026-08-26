@@ -42,10 +42,13 @@
         <div>
             <div class="d-flex align-items-center gap-3 px-2 py-3 mb-4 border-bottom border-secondary border-opacity-10">
                 <div class="bg-gradient-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 40px; height: 40px;">
-                    <i class="fa-solid fa-user-shield fs-5"></i>
+                    <i class="fa-solid fa-graduation-cap fs-5"></i>
                 </div>
                 <div>
-                    <span class="fw-bold text-white d-block fs-6" style="line-height: 1.2;">Admin Panel</span>
+                    <!-- Nama Sekolah langsung ditarik dari database settings -->
+                    <span class="fw-bold text-white d-block fs-6 text-truncate" style="line-height: 1.2; max-width: 150px;" title="{{ \App\Models\Setting::value('school_name') ?? 'Smk 73' }}">
+                        {{ \App\Models\Setting::value('school_name') ?? 'Smk 73' }}
+                    </span>
                     <span class="d-block" style="font-size: 11px; color: #94a3b8;">Portal PPDB Online</span>
                 </div>
             </div>

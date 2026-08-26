@@ -1,14 +1,23 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container-fluid py-2">
-    <div class="mb-4">
+<!-- Bagian Header Detail & Tombol Cetak PDF -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
         <a href="{{ route('admin.ppdb.index') }}" class="btn btn-light text-secondary rounded-pill btn-sm px-3 mb-3 shadow-sm border-0">
             <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Daftar PPDB
         </a>
         <h3 class="fw-bold text-dark m-0">Detail Pendaftaran Calon Siswa</h3>
         <p class="text-muted small m-0">Periksa kelengkapan data dan lakukan verifikasi status pendaftaran.</p>
     </div>
+
+    <!-- Tombol Cetak PDF Individual -->
+    <div>
+        <a href="{{ route('admin.ppdb.export-single-pdf', $ppdb->id) }}" target="_blank" class="btn btn-danger rounded-pill px-4 py-2 shadow-sm d-inline-flex align-items-center gap-2" style="background-color: #dc3545; border: none;">
+            <i class="fa-solid fa-file-pdf"></i> Cetak Formulir PDF
+        </a>
+    </div>
+</div>
 
     @if(session('success'))
         <div class="alert alert-success border-0 bg-success text-white rounded-3 shadow-sm py-3 px-4 mb-4">
@@ -17,50 +26,65 @@
     @endif
 
     <div class="row g-4">
-        <!-- Informasi Biodata Pendaftar -->
+        <!-- Informasi Biodata Pendaftar Lengkap -->
         <div class="col-lg-8">
-            <div class="card-modern border-0 shadow-sm rounded-4 p-4 bg-white h-100">
-                <h5 class="fw-bold text-dark mb-4">Informasi Formulir Siswa</h5>
-
-                <div class="row g-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                <h5 class="fw-bold text-dark mb-4 border-bottom pb-3"><i class="fa-solid fa-user-graduate me-2 text-primary"></i> Data Pribadi Siswa</h5>
+                <div class="row g-3">
                     <div class="col-md-6">
-                        <span class="text-muted small d-block mb-1">Nama Lengkap Siswa</span>
-                        <h6 class="fw-bold text-dark m-0">{{ $ppdb->nama_siswa ?? $ppdb->user->name ?? '-' }}</h6>
+                        <span class="text-muted small d-block">Nama Lengkap</span>
+                        <h6 class="fw-bold text-dark">{{ $ppdb->nama_siswa ?? '-' }}</h6>
                     </div>
-
                     <div class="col-md-6">
-                        <span class="text-muted small d-block mb-1">NISN</span>
-                        <h6 class="fw-bold text-dark m-0">{{ $ppdb->nisn ?? '-' }}</h6>
+                        <span class="text-muted small d-block">NISN</span>
+                        <h6 class="fw-bold text-dark">{{ $ppdb->nisn ?? '-' }}</h6>
                     </div>
-
                     <div class="col-md-6">
-                        <span class="text-muted small d-block mb-1">Jurusan Pilihan</span>
-                        <h6 class="fw-bold text-primary m-0">{{ $ppdb->jurusan ?? '-' }}</h6>
+                        <span class="text-muted small d-block">Jenis Kelamin</span>
+                        <h6 class="fw-bold text-dark">{{ $ppdb->jenis_kelamin ?? '-' }}</h6>
                     </div>
-
                     <div class="col-md-6">
-                        <span class="text-muted small d-block mb-1">Nomor WhatsApp</span>
-                        <h6 class="fw-bold text-dark m-0">{{ $ppdb->no_whatsapp ?? '-' }}</h6>
+                        <span class="text-muted small d-block">Jurusan Pilihan</span>
+                        <h6 class="fw-bold text-primary">{{ $ppdb->jurusan ?? '-' }}</h6>
                     </div>
-
                     <div class="col-md-6">
-                        <span class="text-muted small d-block mb-1">Asal Sekolah</span>
-                        <h6 class="fw-bold text-dark m-0">{{ $ppdb->asal_sekolah ?? '-' }}</h6>
+                        <span class="text-muted small d-block">Asal Sekolah</span>
+                        <h6 class="fw-bold text-dark">{{ $ppdb->asal_sekolah ?? '-' }}</h6>
                     </div>
-
                     <div class="col-md-6">
-                        <span class="text-muted small d-block mb-1">Nama Orang Tua / Wali</span>
-                        <h6 class="fw-bold text-dark m-0">{{ $ppdb->nama_orang_tua ?? '-' }}</h6>
+                        <span class="text-muted small d-block">Tahun Ajaran</span>
+                        <h6 class="fw-bold text-dark">{{ $ppdb->tahun_ajaran ?? '-' }}</h6>
                     </div>
-
-                    <div class="col-md-6">
-                        <span class="text-muted small d-block mb-1">Tahun Ajaran</span>
-                        <span class="text-dark fw-medium">{{ $ppdb->tahun_ajaran ?? '-' }}</span>
+                    <div class="col-12">
+                        <span class="text-muted small d-block">Alamat Lengkap</span>
+                        <h6 class="fw-bold text-dark">{{ $ppdb->alamat ?? '-' }}</h6>
                     </div>
+                </div>
+            </div>
 
+            <!-- Data Orang Tua & Pekerjaan -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                <h5 class="fw-bold text-dark mb-4 border-bottom pb-3"><i class="fa-solid fa-users me-2 text-primary"></i> Data Orang Tua & Pekerjaan</h5>
+                <div class="row g-3">
                     <div class="col-md-6">
-                        <span class="text-muted small d-block mb-1">Tanggal Pendaftaran</span>
-                        <span class="text-dark fw-medium">{{ $ppdb->created_at ? $ppdb->created_at->format('d M Y, H:i') : '-' }}</span>
+                        <span class="text-muted small d-block">Nama Ayah</span>
+                        <h6 class="fw-bold text-dark">{{ $ppdb->nama_ayah ?? '-' }}</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="text-muted small d-block">Pekerjaan Ayah</span>
+                        <h6 class="fw-bold text-dark">{{ $ppdb->pekerjaan_ayah ?? '-' }}</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="text-muted small d-block">Nama Ibu</span>
+                        <h6 class="fw-bold text-dark">{{ $ppdb->nama_ibu ?? '-' }}</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="text-muted small d-block">Pekerjaan Ibu</span>
+                        <h6 class="fw-bold text-dark">{{ $ppdb->pekerjaan_ibu ?? '-' }}</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="text-muted small d-block">Nomor WhatsApp</span>
+                        <h6 class="fw-bold text-dark">{{ $ppdb->no_whatsapp ?? '-' }}</h6>
                     </div>
                 </div>
             </div>
@@ -68,12 +92,11 @@
 
         <!-- Kolom Aksi Verifikasi Status -->
         <div class="col-lg-4">
-            <div class="card-modern border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-between">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-between">
                 <div>
                     <h5 class="fw-bold text-dark mb-3">Aksi Verifikasi</h5>
                     <hr class="text-muted opacity-25 mb-4">
 
-                    <!-- Form Update Status -->
                     <form action="{{ route('admin.ppdb.update', $ppdb->id) }}" method="POST">
                         @csrf
                         @method('PUT')

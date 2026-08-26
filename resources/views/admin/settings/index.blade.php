@@ -1,75 +1,71 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="mb-4">
-    <h3 class="fw-bold mb-1">Pengaturan Sistem</h3>
-    <p class="text-muted">Kelola informasi profil sekolah dan konfigurasi umum website.</p>
-</div>
-
-@if(session('success'))
-    <div class="alert alert-success border-0 bg-success text-white rounded-4 shadow-sm py-3 px-4 mb-4">
-        <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
+<div class="container-fluid px-0">
+    <!-- Header Page -->
+    <div class="mb-4">
+        <h2 class="fw-bold text-dark">Pengaturan Sekolah</h2>
+        <p class="text-muted">Kelola identitas dan informasi umum sekolah.</p>
     </div>
-@endif
 
-<div class="row g-4">
-    <div class="col-lg-8">
-        <div class="card-modern p-4 p-md-5">
-            <h5 class="fw-bold mb-4 text-dark">
-                <i class="fa-solid fa-school me-2 text-primary"></i> Profil Sekolah
-            </h5>
-
-            <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-
-                <div class="mb-4">
-                    <label class="form-label fw-semibold text-dark">Nama Sekolah / Instansi</label>
-                    <input type="text" name="school_name" class="form-control form-control-lg rounded-3 @error('school_name') is-invalid @enderror" value="{{ old('school_name', $setting->school_name ?? '') }}" placeholder="Contoh: SMK Imaginatic Indonesia" required>
-                    @error('school_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                </div>
-
-                <div class="row g-3 mb-4">
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold text-dark">Email Sekolah</label>
-                        <input type="email" name="email" class="form-control form-control-lg rounded-3 @error('email') is-invalid @enderror" value="{{ old('email', $setting->email ?? '') }}" placeholder="info@sekolah.sch.id">
-                        @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold text-dark">Nomor Telepon / WhatsApp</label>
-                        <input type="text" name="phone" class="form-control form-control-lg rounded-3 @error('phone') is-invalid @enderror" value="{{ old('phone', $setting->phone ?? '') }}" placeholder="081234567890">
-                        @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label fw-semibold text-dark">Alamat Lengkap</label>
-                    <textarea name="address" rows="3" class="form-control rounded-3 @error('address') is-invalid @enderror" placeholder="Jalan Raya No. 1, Kota Bekasi">{{ old('address', $setting->address ?? '') }}</textarea>
-                    @error('address') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                </div>
-
-                <div class="d-flex justify-content-end mt-4">
-                    <button type="submit" class="btn btn-primary bg-gradient-primary border-0 rounded-pill px-5 py-3 fw-bold shadow-sm">
-                        <i class="fa-solid fa-floppy-disk me-2"></i> Simpan Pengaturan
-                    </button>
-                </div>
-            </form>
+    <!-- Alert Success -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    </div>
+    @endif
 
-    <!-- Panel Informasi Samping -->
-    <div class="col-lg-4">
-        <div class="card-modern p-4">
-            <h5 class="fw-bold mb-3 text-dark">Petunjuk Pengaturan</h5>
-            <p class="text-muted small">
-                Informasi yang dikonfigurasi di halaman ini akan ditampilkan pada header portal siswa dan bukti formulir pendaftaran PPDB.
-            </p>
-            <hr class="my-3 opacity-10">
-            <div class="d-flex align-items-center gap-3 text-muted small">
-                <i class="fa-solid fa-circle-info text-primary fs-5"></i>
-                <span>Pastikan alamat email dan nomor HP aktif agar calon siswa dapat menghubungi pihak panitia.</span>
+    <!-- Form Setting Card -->
+    <div class="card card-modern p-4">
+        <form action="{{ route('admin.settings.update') }}" method="POST">
+            @csrf
+            @method('PUT')
+
+            <!-- Nama Sekolah -->
+            <div class="mb-3">
+                <label for="school_name" class="form-label fw-semibold">Nama Sekolah</label>
+                <input type="text" class="form-control @error('school_name') is-invalid @enderror" id="school_name" name="school_name" value="{{ old('school_name', $setting->school_name ?? '') }}" placeholder="Masukkan nama sekolah">
+                <div class="form-text text-muted">Perubahan nama ini akan langsung memperbarui teks pada logo/sidebar secara otomatis.</div>
+                @error('school_name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
-        </div>
+
+            <!-- Email Sekolah (Yang tadinya ketinggalan) -->
+            <div class="mb-3">
+                <label for="email" class="form-label fw-semibold">Email Sekolah</label>
+                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $setting->email ?? '') }}" placeholder="contoh: info@sekolah.sch.id">
+                @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Nomor Kontak / Telepon -->
+            <div class="mb-3">
+                <label for="phone" class="form-label fw-semibold">Nomor Kontak</label>
+                <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone', $setting->phone ?? '') }}" placeholder="Contoh: 021-xxxxxxx atau 08xxxxxxxxxx">
+                @error('phone')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Lokasi / Alamat -->
+            <div class="mb-4">
+                <label for="address" class="form-label fw-semibold">Lokasi / Alamat</label>
+                <textarea class="form-control @error('address') is-invalid @enderror" id="address" name="address" rows="3" placeholder="Masukkan alamat lengkap sekolah...">{{ old('address', $setting->address ?? '') }}</textarea>
+                @error('address')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Tombol Simpan -->
+            <div>
+                <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill fw-semibold shadow-sm d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 @endsection

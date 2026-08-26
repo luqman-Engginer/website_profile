@@ -26,7 +26,7 @@
                 <div class="bg-gradient-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
                     <i class="fa-solid fa-graduation-cap fs-6"></i>
                 </div>
-                <span>SMK Imaginatic</span>
+                <span class="font-bold text-lg">{{ \App\Models\Setting::value('school_name') }}</span>
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -60,7 +60,7 @@
     <!-- FOOTER -->
     <footer class="bg-white border-top py-4 mt-5">
         <div class="container text-center text-muted small">
-            <p class="m-0">&copy; 2026 SMK Imaginatic. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} {{ \App\Models\Setting::value('school_name') }}. All rights reserved.</p>
         </div>
     </footer>
 

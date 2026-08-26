@@ -13,11 +13,11 @@
                 <a href="{{ route('register') }}" class="btn btn-primary bg-gradient-primary border-0 rounded-pill px-5 py-3 fw-bold shadow-lg">
                     Daftar Sekarang <i class="fa-solid fa-arrow-right ms-2"></i>
                 </a>
-                <a href="{{ route('about') }}" class="btn btn-light text-secondary rounded-pill px-4 py-3 fw-semibold">Pelajari Lebih Lanjut</a>
+                <a href="{{ route('login') }}" class="btn btn-light text-secondary rounded-pill px-4 py-3 fw-semibold">Masuk Akun</a>
             </div>
         </div>
         <div class="col-lg-6 text-center">
-            <img src="https://illustrations.popsy.co/amber/working-vacation.svg" class="img-fluid" width="500" alt="PPDB Hero">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" class="img-fluid rounded-4 shadow-sm" alt="PPDB Hero">
         </div>
     </div>
 </div>

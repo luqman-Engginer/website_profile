@@ -1,90 +1,67 @@
-<?php
+@extends('layouts.app')
 
-namespace App\Http\Controllers;
+@section('content')
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card-modern p-4 p-md-5 bg-white shadow-sm rounded-4">
+                <div class="text-center mb-4">
+                    <h4 class="fw-bold text-dark">Daftar Akun Baru</h4>
+                    <p class="text-muted small">Silakan isi data diri untuk mendaftar ke portal PPDB.</p>
+                </div>
 
-use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+                @if ($errors->any())
+                    <div class="alert alert-danger border-0 bg-danger text-white rounded-3 small py-2 mb-3">
+                        <ul class="mb-0 ps-3">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
-class AuthController extends Controller
-{
-    /**
-     * Menampilkan form login.
-     */
-    public function showLogin()
-    {
-        return view('auth.login');
-    }
+                <form action="{{ route('register') }}" method="POST">
+                    @csrf
 
-    /**
-     * Memproses otentikasi login pengguna.
-     */
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required',
-        ]);
+                    <div class="mb-3">
+                        <label for="name" class="form-label text-muted small fw-bold">Nama Lengkap</label>
+                        <input type="text" name="name" id="name" class="form-control rounded-3 py-2" value="{{ old('name') }}" required autofocus>
+                    </div>
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+                    <div class="mb-3">
+                        <label for="email" class="form-label text-muted small fw-bold">Alamat Email</label>
+                        <input type="email" name="email" id="email" class="form-control rounded-3 py-2" value="{{ old('email') }}" required>
+                    </div>
 
-            if (Auth::user()->role === 'admin') {
-                return redirect()->intended(route('admin.dashboard'));
-            }
+                    <div class="mb-3">
+                        <label for="password" class="form-label text-muted small fw-bold">Password</label>
+                        <input type="password" name="password" id="password" class="form-control rounded-3 py-2" required>
+                    </div>
 
-            return redirect()->intended(route('user.dashboard'));
-        }
+                    <div class="mb-3">
+                        <label for="password_confirmation" class="form-label text-muted small fw-bold">Konfirmasi Password</label>
+                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control rounded-3 py-2" required>
+                    </div>
 
-        return back()->with('error', 'Email atau password yang Anda masukkan salah.')->withInput();
-    }
+                    <!-- Pilihan Role (Menyesuaikan controller aslimu) -->
+                    <div class="mb-4">
+                        <label for="role" class="form-label text-muted small fw-bold">Daftar Sebagai</label>
+                        <select name="role" id="role" class="form-select rounded-3 py-2">
+                            <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User / Siswa Pendaftar</option>
+                            <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                        </select>
+                    </div>
 
-    /**
-     * Menampilkan form registrasi.
-     */
-    public function showRegister()
-    {
-        return view('auth.register');
-    }
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-semibold shadow-sm mb-3" style="background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); border: none;">
+                        Daftar Sekarang
+                    </button>
 
-    /**
-     * Memproses pendaftaran akun baru (Tanpa validasi konfirmasi password).
-     */
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-            'role'     => 'nullable|in:user,admin',
-        ]);
-
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => $request->role ?? 'user',
-        ]);
-
-        Auth::login($user);
-
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard')->with('success', 'Registrasi Admin berhasil!');
-        }
-
-        return redirect()->route('user.dashboard')->with('success', 'Registrasi berhasil! Selamat datang di Portal PPDB.');
-    }
-
-    /**
-     * Memproses logout pengguna.
-     */
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect()->route('login');
-    }
-}
+                    <div class="text-center">
+                        <small class="text-muted">Sudah punya akun? <a href="{{ route('login') }}" class="text-decoration-none fw-semibold" style="color: #4f46e5;">Masuk di sini</a></small>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

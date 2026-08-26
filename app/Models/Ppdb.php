@@ -11,13 +11,18 @@ class Ppdb extends Model
 
     protected $fillable = [
         'user_id',
-        'tahun_ajaran',    // <--- WAJIB ADA INI
+        'tahun_ajaran',
         'nama_siswa',
         'nisn',
+        'jenis_kelamin',
         'jurusan',
         'asal_sekolah',
-        'nama_orang_tua',
+        'nama_ayah',
+        'pekerjaan_ayah',
+        'nama_ibu',
+        'pekerjaan_ibu',
         'no_whatsapp',
+        'alamat',
         'status',
     ];
 

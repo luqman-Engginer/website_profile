@@ -8,20 +8,22 @@ use App\Models\Setting;
 
 class PublicController extends Controller
 {
-    public function home()
-    {
-        return view('public.home');
-    }
+   public function home()
+{
+    return view('welcome');
+}
 
     public function about()
     {
-        return view('public.about');
+        $setting = Setting::first();
+        return view('public.about', compact('setting'));
     }
 
     public function gallery()
     {
         $galleries = Gallery::latest()->get();
-        return view('public.gallery', compact('galleries'));
+        $setting = Setting::first(); // Boleh ditambahkan juga kalau galeri butuh data setting
+        return view('public.gallery', compact('galleries', 'setting'));
     }
 
     public function contact()
