@@ -79,6 +79,13 @@
                         <i class="fa-solid fa-gear me-2"></i> Pengaturan
                     </a>
                 </li>
+
+                <!-- TAMBAHAN: Tombol Lihat Website -->
+                <li class="nav-item mt-2">
+                    <a href="{{ url('/') }}" target="_blank" class="nav-link text-info">
+                        <i class="fa-solid fa-globe me-2"></i> Lihat Website
+                    </a>
+                </li>
             </ul>
         </div>
 

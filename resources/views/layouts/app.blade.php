@@ -40,9 +40,17 @@
                 </ul>
                 <div class="d-flex gap-2 ms-lg-3 mt-3 mt-lg-0">
                     @auth
-                        <a href="{{ auth()->user()->role == 'admin' ? route('admin.dashboard') : route('user.dashboard') }}" class="btn btn-primary bg-gradient-primary border-0 rounded-pill px-4 fw-semibold shadow-sm">
-                            <i class="fa-solid fa-gauge me-1"></i> Dashboard
-                        </a>
+                        @if(auth()->user()->role === 'admin' || (isset(auth()->user()->is_admin) && auth()->user()->is_admin))
+                            <!-- Kalau yang login adalah Admin -->
+                            <a href="{{ route('admin.dashboard') }}" class="btn btn-primary bg-gradient-primary border-0 rounded-pill px-4 fw-semibold shadow-sm">
+                                <i class="fa-solid fa-gauge me-1"></i> Back to Dashboard
+                            </a>
+                        @else
+                            <!-- Kalau yang login adalah User biasa -->
+                            <a href="{{ route('user.dashboard') }}" class="btn btn-primary bg-gradient-primary border-0 rounded-pill px-4 fw-semibold shadow-sm">
+                                <i class="fa-solid fa-gauge me-1"></i> Back to Dashboard
+                            </a>
+                        @endif
                     @else
                         <a href="{{ route('login') }}" class="btn btn-light text-primary rounded-pill px-4 fw-semibold">Masuk</a>
                         <a href="{{ route('register') }}" class="btn btn-primary bg-gradient-primary border-0 rounded-pill px-4 fw-semibold shadow-sm">Daftar</a>

@@ -65,37 +65,48 @@
 
     <div class="d-flex">
         <!-- SIDEBAR USER -->
-        <aside class="sidebar vh-100 position-fixed" style="width: 270px; z-index: 1000;">
-            <div class="d-flex align-items-center justify-content-center p-4">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="bg-gradient-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                        <i class="fa-solid fa-graduation-cap"></i>
+        <aside class="sidebar vh-100 position-fixed d-flex flex-column justify-content-between" style="width: 270px; z-index: 1000;">
+            <div>
+                <div class="d-flex align-items-center justify-content-center p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-gradient-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <span class="fw-bold text-dark fs-5">Student Portal</span>
                     </div>
-                    <span class="fw-bold text-dark fs-5">Student Portal</span>
+                </div>
+
+                <div class="p-3">
+                    <ul class="nav nav-pills flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('user.dashboard') ? 'active' : '' }} px-3 py-2" href="{{ route('user.dashboard') }}">
+                                <i class="fa-solid fa-house me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('user.ppdb') ? 'active' : '' }} px-3 py-2" href="{{ route('user.ppdb') }}">
+                                <i class="fa-solid fa-file-pen me-2"></i> Form PPDB
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('user.profile') ? 'active' : '' }} px-3 py-2" href="{{ route('user.profile') }}">
+                                <i class="fa-solid fa-user me-2"></i> Profil Saya
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
+            <!-- BAGIAN BAWAH SIDEBAR (Tombol Website & Logout) -->
             <div class="p-3">
-                <ul class="nav nav-pills flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('user.dashboard') ? 'active' : '' }} px-3 py-2" href="{{ route('user.dashboard') }}">
-                            <i class="fa-solid fa-house me-2"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('user.ppdb') ? 'active' : '' }} px-3 py-2" href="{{ route('user.ppdb') }}">
-                            <i class="fa-solid fa-file-pen me-2"></i> Form PPDB
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('user.profile') ? 'active' : '' }} px-3 py-2" href="{{ route('user.profile') }}">
-                            <i class="fa-solid fa-user me-2"></i> Profil Saya
-                        </a>
-                    </li>
-                </ul>
+                <hr class="my-2 opacity-10">
 
-                <hr class="my-4 opacity-10">
+                <!-- TOMBOL KE WEBSITE UTAMA / PUBLIC -->
+                <a href="{{ route('home') }}" class="btn btn-light text-primary w-100 d-flex align-items-center justify-content-center gap-2 rounded-4 py-2 mb-2" style="background: #e0e7ff; border: none; font-weight: 600;">
+                    <i class="fa-solid fa-globe"></i> Lihat Website
+                </a>
 
+                <!-- TOMBOL LOGOUT -->
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="btn btn-light text-danger w-100 d-flex align-items-center justify-content-center gap-2 rounded-4 py-2" style="background: #fee2e2; border: none; font-weight: 600;">
