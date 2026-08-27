@@ -4,41 +4,87 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
-                <div class="text-center mb-4">
-                    <h3 class="fw-bold text-dark">Formulir Pendaftaran PPDB</h3>
-                    <p class="text-muted small">Silakan lengkapi data diri, asal sekolah, dan data orang tua Anda secara akurat.</p>
+            <div class="text-center mb-4">
+                <h3 class="fw-bold text-dark">Formulir Pendaftaran PPDB</h3>
+                <p class="text-muted small">Silakan lengkapi data diri, asal sekolah, dan data orang tua Anda secara akurat.</p>
+            </div>
+
+            @if(session('success'))
+                <div class="alert alert-success border-0 bg-success text-white rounded-3 small py-3 mb-4 shadow-sm">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if(isset($ppdb))
+                <!-- 1. KOTAK STATUS PENDAFTARAN (Dipisah agar jelas) -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-circle">
+                                <i class="fa-solid fa-circle-check fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1 text-dark">Anda Sudah Terdaftar!</h5>
+                                <p class="text-muted small mb-0">Data pendaftaran Anda telah tersimpan di sistem.</p>
+                            </div>
+                        </div>
+                        <div>
+                            @if($ppdb->status == 'Diterima')
+                                <span class="badge bg-success text-white px-3 py-2 rounded-pill fs-6">
+                                    <i class="fa-solid fa-check me-1"></i> Diterima
+                                </span>
+                            @elseif($ppdb->status == 'Ditolak')
+                                <span class="badge bg-danger text-white px-3 py-2 rounded-pill fs-6">
+                                    <i class="fa-solid fa-xmark me-1"></i> Ditolak
+                                </span>
+                            @else
+                                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fs-6">
+                                    <i class="fa-solid fa-hourglass-half me-1"></i> Menunggu Verifikasi
+                                </span>
+                            @endif
+                        </div>
+                    </div>
                 </div>
 
-                @if(session('success'))
-                    <div class="alert alert-success border-0 bg-success text-white rounded-3 small py-3 mb-4">
-                        {{ session('success') }}
-                    </div>
-                @endif
+                <!-- 2. KOTAK DETAIL DATA PENDAFTAR (Dibuat lebih rapi, longgar, tidak mepet) -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                    <h5 class="fw-bold text-dark mb-4 pb-2 border-bottom">Detail Data Pendaftar</h5>
 
-                @if(isset($ppdb))
-                    <div class="alert alert-info border-0 rounded-4 p-4 bg-light">
-                        <h5 class="fw-bold text-primary mb-3"><i class="fa-solid fa-circle-check me-2"></i> Anda Sudah Terdaftar!</h5>
-                        <div class="row g-2 small">
-                            <div class="col-md-6"><strong>Nama Lengkap:</strong> {{ $ppdb->nama_siswa }}</div>
-                            <div class="col-md-6"><strong>NISN:</strong> {{ $ppdb->nisn }}</div>
-                            <div class="col-md-6"><strong>Jurusan Pilihan:</strong> {{ $ppdb->jurusan }}</div>
-                            <div class="col-md-6"><strong>Asal Sekolah:</strong> {{ $ppdb->asal_sekolah }}</div>
-                            <div class="col-md-6"><strong>Nama Ayah:</strong> {{ $ppdb->nama_ayah }} ({{ $ppdb->pekerjaan_ayah }})</div>
-                            <div class="col-md-6"><strong>Nama Ibu:</strong> {{ $ppdb->nama_ibu }} ({{ $ppdb->pekerjaan_ibu }})</div>
-                            <div class="col-12 mt-2">
-                                <strong>Status Pendaftaran:</strong><br>
-                                @if($ppdb->status == 'Diterima')
-                                    <span class="badge bg-success text-white px-3 py-2 mt-1"><i class="fa-solid fa-check me-1"></i> Diterima</span>
-                                @elseif($ppdb->status == 'Ditolak')
-                                    <span class="badge bg-danger text-white px-3 py-2 mt-1"><i class="fa-solid fa-xmark me-1"></i> Ditolak</span>
-                                @else
-                                    <span class="badge bg-warning text-dark px-3 py-2 mt-1"><i class="fa-solid fa-hourglass-half me-1"></i> Menunggu Verifikasi</span>
-                                @endif
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <span class="text-muted small d-block mb-1">Nama Lengkap Siswa</span>
+                                <h6 class="fw-semibold text-dark mb-0">{{ $ppdb->nama_siswa }}</h6>
+                            </div>
+                            <div class="mb-3">
+                                <span class="text-muted small d-block mb-1">Jurusan Pilihan</span>
+                                <h6 class="fw-semibold text-dark mb-0">{{ $ppdb->jurusan }}</h6>
+                            </div>
+                            <div class="mb-3">
+                                <span class="text-muted small d-block mb-1">Nama Ayah & Pekerjaan</span>
+                                <h6 class="fw-semibold text-dark mb-0">{{ $ppdb->nama_ayah }} ({{ $ppdb->pekerjaan_ayah }})</h6>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <span class="text-muted small d-block mb-1">NISN</span>
+                                <h6 class="fw-semibold text-dark mb-0">{{ $ppdb->nisn }}</h6>
+                            </div>
+                            <div class="mb-3">
+                                <span class="text-muted small d-block mb-1">Asal Sekolah</span>
+                                <h6 class="fw-semibold text-dark mb-0">{{ $ppdb->asal_sekolah }}</h6>
+                            </div>
+                            <div class="mb-3">
+                                <span class="text-muted small d-block mb-1">Nama Ibu & Pekerjaan</span>
+                                <h6 class="fw-semibold text-dark mb-0">{{ $ppdb->nama_ibu }} ({{ $ppdb->pekerjaan_ibu }})</h6>
                             </div>
                         </div>
                     </div>
-                @else
+                </div>
+            @else
+                <!-- FORMULIR PENDAFTARAN -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
                     <form action="{{ route('user.ppdb') }}" method="POST">
                         @csrf
 
@@ -112,8 +158,8 @@
                             Kirim Pendaftaran Sekarang
                         </button>
                     </form>
-                @endif
-            </div>
+                </div>
+            @endif
         </div>
     </div>
 </div>

@@ -118,8 +118,8 @@
 
         <!-- MAIN CONTENT -->
         <main class="w-100" style="margin-left: 270px; min-height: 100vh;">
-            <header class="d-flex justify-content-between align-items-center p-4 bg-white sticky-top" style="box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
-                <h5 class="m-0 fw-bold" style="color: #2b3445;">Portal Siswa</h5>
+            <!-- HEADER DIUBAH: Menggunakan justify-content-end agar profil rapi di kanan saat teks Portal Siswa dihapus -->
+            <header class="d-flex justify-content-end align-items-center px-4 py-3 bg-white sticky-top" style="box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
                 <div class="d-flex align-items-center gap-3">
                     <div class="text-end d-none d-md-block">
                         <p class="m-0 fw-semibold fs-6">{{ auth()->user()->name ?? 'Siswa' }}</p>

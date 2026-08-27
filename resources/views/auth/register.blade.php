@@ -20,36 +20,29 @@
                     </div>
                 @endif
 
-                <form action="{{ route('register') }}" method="POST">
+                <form action="{{ route('register') }}" method="POST" autocomplete="off">
                     @csrf
 
                     <div class="mb-3">
                         <label for="name" class="form-label text-muted small fw-bold">Nama Lengkap</label>
-                        <input type="text" name="name" id="name" class="form-control rounded-3 py-2" value="{{ old('name') }}" required autofocus>
+                        <input type="text" name="name" id="name" class="form-control rounded-3 py-2" value="{{ old('name') }}" required autofocus autocomplete="off">
                     </div>
 
                     <div class="mb-3">
                         <label for="email" class="form-label text-muted small fw-bold">Alamat Email</label>
-                        <input type="email" name="email" id="email" class="form-control rounded-3 py-2" value="{{ old('email') }}" required>
+                        <!-- Ditambahkan autocomplete="off" agar email tidak asal terisi otomatis -->
+                        <input type="email" name="email" id="email" class="form-control rounded-3 py-2" value="{{ old('email') }}" required autocomplete="off">
                     </div>
 
                     <div class="mb-3">
                         <label for="password" class="form-label text-muted small fw-bold">Password</label>
-                        <input type="password" name="password" id="password" class="form-control rounded-3 py-2" required>
+                        <!-- Ditambahkan value="" dan autocomplete="new-password" agar password bersih total -->
+                        <input type="password" name="password" id="password" class="form-control rounded-3 py-2" value="" required autocomplete="new-password">
                     </div>
 
                     <div class="mb-3">
                         <label for="password_confirmation" class="form-label text-muted small fw-bold">Konfirmasi Password</label>
-                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control rounded-3 py-2" required>
-                    </div>
-
-                    <!-- Pilihan Role (Menyesuaikan controller aslimu) -->
-                    <div class="mb-4">
-                        <label for="role" class="form-label text-muted small fw-bold">Daftar Sebagai</label>
-                        <select name="role" id="role" class="form-select rounded-3 py-2">
-                            <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User / Siswa Pendaftar</option>
-                            <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                        </select>
+                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control rounded-3 py-2" value="" required autocomplete="new-password">
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-semibold shadow-sm mb-3" style="background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); border: none;">

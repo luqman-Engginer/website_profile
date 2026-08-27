@@ -22,25 +22,41 @@ class AuthController extends Controller
      * Memproses otentikasi login pengguna.
      */
     public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required',
-        ]);
+{
+    $request->validate([
+        'email'    => 'required|email',
+        'password' => 'required',
+        'role'     => 'required|in:user,admin',
+    ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+    // 1. Cari user berdasarkan email terlebih dahulu (tanpa Auth::attempt langsung)
+    $user = User::where('email', $request->email)->first();
 
-            // Direct dashboard berdasarkan role pengguna
-            if (Auth::user()->role === 'admin') {
-                return redirect()->intended(route('admin.dashboard'));
-            }
-
-            return redirect()->intended(route('user.dashboard'));
-        }
-
+    // Cek apakah email terdaftar dan passwordnya cocok
+    if (!$user || !Hash::check($request->password, $user->password)) {
         return back()->with('error', 'Email atau password yang Anda masukkan salah.')->withInput();
     }
+
+    // 2. CEK ROLE: Jika yang dipilih di form beda dengan role asli di database, langsung tolak!
+    if ($request->role === 'admin' && $user->role !== 'admin') {
+        return back()->with('error', 'Akses ditolak! Akun Anda terdaftar sebagai User, bukan Administrator. Silakan ubah pilihan role Anda.')->withInput();
+    }
+
+    if ($request->role === 'user' && $user->role === 'admin') {
+        return back()->with('error', 'Akses ditolak! Akun Administrator harus memilih role Administrator.')->withInput();
+    }
+
+    // 3. Jika semua cocok, baru login-kan user secara resmi
+    Auth::login($user);
+    $request->session()->regenerate();
+
+    // Redirect sesuai role
+    if ($user->role === 'admin') {
+        return redirect()->intended(route('admin.dashboard'));
+    }
+
+    return redirect()->intended(route('user.dashboard'));
+}
 
     /**
      * Menampilkan form registrasi.
@@ -55,15 +71,17 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        // 1. Validasi dasar (Aturan 'confirmed' dilepas agar fleksibel)
-        $request->validate([
+        // 1. Validasi input registrasi (Role sudah dihapus dari sini agar aman)
+        $validatedData = $request->validate([
             'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
+            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users', 'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/'],
             'password' => 'required|string|min:6',
-            'role'     => 'nullable|in:user,admin',
+        ], [
+            'email.regex' => 'Domain email wajib menggunakan @gmail.com!',
+            'email.email' => 'Format email tidak valid.',
         ]);
 
-        // 2. Cek manual nilai password vs konfirmasi password (kebal dari beda penamaan field Blade)
+        // 2. Cek manual konfirmasi password
         $confirmPassword = $request->input('password_confirmation') ?? $request->input('confirm_password');
 
         if ($request->password !== $confirmPassword) {
@@ -72,22 +90,18 @@ class AuthController extends Controller
             ])->withInput();
         }
 
-        // 3. Buat akun baru ke database dengan assign role
+        // 3. Simpan data ke database dengan role otomatis 'user'
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role'     => $request->role ?? 'user',
+            'role'     => 'user', // Otomatis diset sebagai user, aman dari pendaftaran admin ilegal
         ]);
 
         // Otomatis login setelah berhasil mendaftar
         Auth::login($user);
 
-        // Redirect sesuai role yang baru terdaftar
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard')->with('success', 'Registrasi akun Admin berhasil!');
-        }
-
+        // Karena pendaftar pasti user, langsung arahkan ke dashboard user
         return redirect()->route('user.dashboard')->with('success', 'Registrasi berhasil! Selamat datang di Portal PPDB.');
     }
 

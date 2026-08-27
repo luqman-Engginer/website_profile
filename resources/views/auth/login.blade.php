@@ -14,14 +14,26 @@
 
         <form action="{{ route('login') }}" method="POST">
             @csrf
+
             <div class="mb-3">
                 <label class="form-label fw-semibold">Email</label>
-                <input type="email" name="email" class="form-control rounded-3" placeholder="email@domain.com" required>
+                <input type="email" name="email" class="form-control rounded-3" placeholder="email@domain.com" value="{{ old('email') }}" required>
             </div>
+
+            <!-- PILIHAN ROLE DI HALAMAN LOGIN -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Masuk Sebagai</label>
+                <select name="role" class="form-select rounded-3" required>
+                    <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User / Siswa Pendaftar</option>
+                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Administrator</option>
+                </select>
+            </div>
+
             <div class="mb-4">
                 <label class="form-label fw-semibold">Password</label>
                 <input type="password" name="password" class="form-control rounded-3" placeholder="Masukkan password" required>
             </div>
+
             <button type="submit" class="btn btn-primary bg-gradient-primary border-0 w-100 rounded-pill py-3 fw-bold shadow-sm">Masuk</button>
         </form>
 
