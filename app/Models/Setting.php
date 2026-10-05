@@ -6,12 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
-    protected $table = 'settings'; // <-- Tegaskan kalau nama tabelnya pakai 's'
+    protected $table = 'settings';
 
     protected $fillable = [
         'school_name',
         'email',
         'phone',
-        'address'
+        'address',
+        'social_media',
+        'map_link',
+        'school_photo',
     ];
 }
